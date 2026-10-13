@@ -1,7 +1,7 @@
 ---
 title: 推出可重複使用的 AI 技能
 date: 2026-03-01
-category: 產品
+category: product
 excerpt: 將生成的工作流程封裝成可重複使用的技能，讓整個團隊都能再次執行。（假字示意）
 ---
 

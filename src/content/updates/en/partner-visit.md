@@ -1,7 +1,7 @@
 ---
 title: Nexora AI visits a partner to share practical AI automation
 date: 2026-07-01
-category: 公司
+category: company
 excerpt: Our team visited a partner company to introduce Nexora AI and discuss how AI can support more productive workflows. (Placeholder)
 image: /images/placeholder-16x9.svg
 imageAlt: Meeting room presentation (placeholder)

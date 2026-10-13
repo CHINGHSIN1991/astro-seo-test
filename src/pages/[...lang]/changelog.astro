@@ -11,7 +11,7 @@ const pairs = pairEntries(await getCollection('changelog')).sort((a, b) => b.zh.
 const rendered = await Promise.all(
   pairs.map(async (p) => {
     const entry = pick(p, lang);
-    return { id: p.zh.id, entry, Content: (await render(entry)).Content };
+    return { id: p.slug, entry, Content: (await render(entry)).Content };
   }),
 );
 const last = rendered.length - 1;

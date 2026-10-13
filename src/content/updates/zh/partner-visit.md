@@ -1,7 +1,7 @@
 ---
 title: Nexora AI 拜訪示範夥伴，分享實務 AI 自動化經驗
 date: 2026-07-01
-category: 公司
+category: company
 excerpt: 我們的團隊拜訪了示範夥伴公司，介紹 Nexora AI 並討論 AI 如何支援更有效率的工作流程。（假字示意）
 image: /images/placeholder-16x9.svg
 imageAlt: 會議室簡報示意（假圖）

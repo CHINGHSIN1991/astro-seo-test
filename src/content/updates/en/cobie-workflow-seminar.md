@@ -1,7 +1,7 @@
 ---
 title: Nexora AI reduces a 15–20 hour data delivery workflow to 1.5–2 hours
 date: 2026-08-05
-category: 活動
+category: event
 excerpt: At an industry seminar, we demonstrated how Nexora AI creates delivery parameters, exports worksheets, and runs automated checks. (Placeholder)
 image: /images/placeholder-16x9.svg
 imageAlt: Seminar venue (placeholder)

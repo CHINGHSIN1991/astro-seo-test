@@ -1,7 +1,7 @@
 ---
 title: Nexora AI 將資料交付工作流程從 15–20 小時縮短至 1.5–2 小時
 date: 2026-08-05
-category: 活動
+category: event
 excerpt: 在產業研討會中，我們展示如何運用 Nexora AI 自動建立交付參數、輸出表單並完成自動檢查。（假字示意）
 image: /images/placeholder-16x9.svg
 imageAlt: 研討會現場示意（假圖）

@@ -1,7 +1,7 @@
 ---
 title: Introducing reusable AI Skills
 date: 2026-03-01
-category: 產品
+category: product
 excerpt: Package generated workflows into reusable Skills your whole team can run again. (Placeholder)
 ---
 

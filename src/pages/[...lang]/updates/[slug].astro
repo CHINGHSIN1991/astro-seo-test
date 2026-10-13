@@ -9,12 +9,12 @@ export async function getStaticPaths() {
   const pairs = pairEntries(await getCollection('updates')).sort((a, b) => b.zh.data.date.valueOf() - a.zh.data.date.valueOf());
   return langPaths().flatMap(({ params, props }) =>
     pairs.map((p) => ({
-      params: { ...params, slug: p.zh.id },
+      params: { ...params, slug: p.slug },
       props: {
         lang: props.lang as Lang,
-        slug: p.zh.id,
+        slug: p.slug,
         entry: pick(p, props.lang),
-        readNext: pairs.filter((o) => o.zh.id !== p.zh.id).slice(0, 2).map((o) => ({ slug: o.zh.id, entry: pick(o, props.lang) })),
+        readNext: pairs.filter((o) => o.slug !== p.slug).slice(0, 2).map((o) => ({ slug: o.slug, entry: pick(o, props.lang) })),
       },
     })),
   );

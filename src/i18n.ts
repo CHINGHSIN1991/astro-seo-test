@@ -2,7 +2,7 @@
  * 雙語字典與路由工具。
  * - 中文為預設語言，位於根路徑；英文位於 /en 前綴（Astro i18n routing）
  * - 頁面放在 src/pages/[...lang]/，由 langPaths() 同時產生兩種語言的靜態路徑
- * - Markdown 內容以 `<id>.en.md` 對照檔提供英文版，缺少時回退為中文
+ * - Markdown 內容依語系放在 `<collection>/zh/` 與 `<collection>/en/`，英文缺檔時回退為中文
  */
 export type Lang = 'zh' | 'en';
 export const LANGS: Lang[] = ['zh', 'en'];
@@ -305,9 +305,8 @@ export function switchLangPath(lang: Lang, pathname: string) {
   return `${base}${stripped || '/'}`;
 }
 
-/** 分類（中文 enum）→ 字典 key */
-export const categoryKey = (c: string): Key =>
-  (({ 產品: 'category.product', 公司: 'category.company', 活動: 'category.event' }) as Record<string, Key>)[c] ?? 'category.product';
+/** 分類 key（product / company / event）→ 字典 key */
+export const categoryKey = (c: string): Key => `category.${c}` as Key;
 
 export function formatDate(date: Date, lang: Lang = 'zh', style: 'short' | 'spaced' = 'short') {
   if (lang === 'en') {
@@ -317,10 +316,21 @@ export function formatDate(date: Date, lang: Lang = 'zh', style: 'short' | 'spac
   return new Intl.DateTimeFormat('zh-TW', { year: 'numeric', month: 'long', day: 'numeric' }).format(date);
 }
 
-/** 把 content collection 的中文條目與對應的 `<id>.en` 英文條目配成一對 */
-export function pairEntries<T extends { id: string }>(entries: T[]): { zh: T; en?: T }[] {
-  const enMap = new Map(entries.filter((e) => e.id.endsWith('.en')).map((e) => [e.id.slice(0, -3), e]));
-  return entries.filter((e) => !e.id.endsWith('.en')).map((zh) => ({ zh, en: enMap.get(zh.id) }));
+/** 條目 id 形如 `zh/<slug>`、`en/<slug>`；拆出語系與 slug */
+const splitId = (id: string) => {
+  const i = id.indexOf('/');
+  return { lang: id.slice(0, i) as Lang, slug: id.slice(i + 1) };
+};
+
+/** 以 slug 把 `zh/<slug>` 與 `en/<slug>` 條目配成一對（以中文為主，英文可缺） */
+export function pairEntries<T extends { id: string }>(entries: T[]): { slug: string; zh: T; en?: T }[] {
+  const en = new Map(entries.filter((e) => e.id.startsWith('en/')).map((e) => [splitId(e.id).slug, e]));
+  return entries
+    .filter((e) => e.id.startsWith('zh/'))
+    .map((zh) => {
+      const { slug } = splitId(zh.id);
+      return { slug, zh, en: en.get(slug) };
+    });
 }
 
 /** 依語言挑出條目（英文缺檔時回退中文） */

@@ -169,7 +169,7 @@ const h2 = 'mt-4 text-3xl font-medium tracking-tightest text-ink md:text-4xl';
         <div class="reveal md:col-span-8">
           {updates.map((u) => {
             const e = pick(u, lang);
-            return <NewsRow href={localePath(lang, `/updates/${u.zh.id}`)} category={e.data.category} title={e.data.title} date={e.data.date} />;
+            return <NewsRow href={localePath(lang, `/updates/${u.slug}`)} category={e.data.category} title={e.data.title} date={e.data.date} />;
           })}
         </div>
         <div class="reveal md:col-span-3 md:col-start-10">

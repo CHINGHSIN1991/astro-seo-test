@@ -1,15 +1,16 @@
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 
-/** 保留檔名作為 id（含 `.en` 後綴），例如 partner-visit.en.md → partner-visit.en */
-const generateId = ({ entry }: { entry: string }) => entry.replace(/\.md$/, '');
-
+/**
+ * 內容依語系分資料夾：`<collection>/zh/<slug>.md` 與 `<collection>/en/<slug>.md`。
+ * entry id 會是 `zh/<slug>`、`en/<slug>`，由 i18n 的 pairEntries() 依前綴配對。
+ */
 const updates = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './src/content/updates', generateId }),
+  loader: glob({ pattern: '**/*.md', base: './src/content/updates' }),
   schema: z.object({
     title: z.string(),
     date: z.coerce.date(),
-    category: z.enum(['產品', '公司', '活動']),
+    category: z.enum(['product', 'company', 'event']),
     excerpt: z.string(),
     image: z.string().optional(),
     imageAlt: z.string().optional(),
@@ -17,7 +18,7 @@ const updates = defineCollection({
 });
 
 const changelog = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './src/content/changelog', generateId }),
+  loader: glob({ pattern: '**/*.md', base: './src/content/changelog' }),
   schema: z.object({
     title: z.string(),
     date: z.coerce.date(),

@@ -1,7 +1,7 @@
 ---
 title: Nexora AI shares how AI boosts design tool productivity at an industry event
 date: 2026-05-30
-category: 公司
+category: company
 excerpt: Our CEO joined industry leaders to discuss practical AI automation for design tool users. (Placeholder)
 image: /images/placeholder-16x9.svg
 imageAlt: Event talk (placeholder)

@@ -1,7 +1,7 @@
 ---
 title: Nexora AI 於產業活動分享 AI 如何提升設計工具生產力
 date: 2026-05-30
-category: 公司
+category: company
 excerpt: 執行長與產業領袖共同探討面向設計工具使用者的實務 AI 自動化。（假字示意）
 image: /images/placeholder-16x9.svg
 imageAlt: 活動演講示意（假圖）
