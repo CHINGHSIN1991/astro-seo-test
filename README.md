@@ -11,7 +11,14 @@ npm run build     # 輸出至 dist/
 npm run preview   # 預覽 build 結果
 ```
 
-技術：Astro 7、Tailwind CSS 4（`@tailwindcss/vite`）、Content Collections。純靜態輸出，無需伺服器。
+技術：Astro 7、Tailwind CSS 4（`@tailwindcss/vite`）、Content Collections、Astro i18n routing。純靜態輸出，無需伺服器。
+
+## 多語系
+
+- 中文（預設）在根路徑，英文在 `/en/` 前綴，例如 `/updates` ↔ `/en/updates`。Header 與 Footer 的語言切換會連到同一頁的另一語言版本。
+- 頁面都放在 `src/pages/[...lang]/`，以 `langPaths()` 同時產生兩種語言；介面文字集中在 `src/i18n.ts` 的 `dict`。
+- Markdown 內容以同名的 `.en.md` 提供英文版（例如 `partner-visit.md` 與 `partner-visit.en.md`）；缺少英文檔時英文頁面會回退顯示中文內容。
+- 服務條款與隱私權政策僅維護中文版，英文頁面會顯示提示文字。
 
 ## 頁面
 
@@ -26,10 +33,9 @@ npm run preview   # 預覽 build 結果
 
 ## 替換內容的位置
 
-- **品牌／文案／數據／見證**：`src/data/site.ts`
-- **更新日誌**：在 `src/content/changelog/` 新增 `.md`，frontmatter 需有 `title`、`date`、`intro`
-- **最新消息**：在 `src/content/updates/` 新增 `.md`，frontmatter 需有 `title`、`date`、`category`（產品／公司／活動）、`excerpt`，`image` 選填
+- **介面文案（中英）**：`src/i18n.ts` 的 `dict`；聯絡資訊與數據數值在 `src/data/site.ts`
+- **更新日誌**：在 `src/content/changelog/` 新增 `.md`（英文版為同名 `.en.md`），frontmatter 需有 `title`、`date`、`intro`
+- **最新消息**：在 `src/content/updates/` 新增 `.md`（英文版為同名 `.en.md`，`category` 仍填中文值），frontmatter 需有 `title`、`date`、`category`（產品／公司／活動）、`excerpt`，`image` 選填
 - **假圖**：頁面內使用 `src/components/Placeholder.astro`；Markdown 內使用 `/images/placeholder-16x9.svg`、`/images/placeholder-4x3.svg`
 - **配色／字體**：`src/styles/global.css` 的 `@theme`（品牌色 `--color-brand`）
-- **表單後端**：`src/pages/request-demo.astro` 底部 `<script>` 內的 `TODO`，將模擬送出改為實際 API 呼叫
-# astro-seo-test
+- **表單後端**：`src/pages/[...lang]/request-demo.astro` 底部 `<script>` 內的 `TODO`，將模擬送出改為實際 API 呼叫

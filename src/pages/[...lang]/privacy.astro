@@ -1,18 +1,25 @@
 ---
-import Base from '../layouts/Base.astro';
+import Base from '../../layouts/Base.astro';
+import { langPaths, tr, useLang, localePath } from '../../i18n';
+
+export const getStaticPaths = langPaths;
+
+const lang = useLang(Astro);
+const $ = tr(lang);
 ---
 
-<Base title="隱私權政策">
+<Base title={$('legal.privacy')}>
   <article class="mx-auto max-w-4xl px-6 pb-24 pt-12 md:pb-32 md:pt-16">
-    <a href="/" class="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-ink">
+    <a href={localePath(lang, '/')} class="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-ink">
       <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
-      回首頁
+      {$('legal.home')}
     </a>
     <header class="mt-10 border-b border-border pb-10 md:mt-12 md:pb-14">
-      <h1 class="text-4xl font-medium leading-[1.08] tracking-tightest text-ink md:text-5xl">隱私權政策</h1>
-      <p class="mt-6 text-muted-foreground">生效日期：2026 年 1 月 1 日（假字示意）</p>
+      <h1 class="text-4xl font-medium leading-[1.08] tracking-tightest text-ink md:text-5xl">{$('legal.privacy')}</h1>
+      <p class="mt-6 text-muted-foreground">{$('legal.effective')}</p>
+      {lang === 'en' && <p class="mt-4 text-sm text-muted-foreground">{$('legal.zhOnly')}</p>}
     </header>
-    <div class="update-prose mx-auto mt-12 max-w-3xl md:mt-16">
+    <div class="update-prose mx-auto mt-12 max-w-3xl md:mt-16" lang="zh-Hant">
       <h2>第一條 總則</h2>
       <p>本文件為假字示意內容，實際條款待法務確認後補上。歡迎使用本服務，使用本服務即表示您同意遵守本文件所載之各項條款。</p>
       <h2>第二條 定義</h2>

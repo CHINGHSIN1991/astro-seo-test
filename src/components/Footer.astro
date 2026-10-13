@@ -1,11 +1,15 @@
 ---
 import Logo from './Logo.astro';
+import LangSwitch from './LangSwitch.astro';
 import { site } from '../data/site';
+import { tr, useLang, localePath, type Key } from '../i18n';
+const lang = useLang(Astro);
+const $ = tr(lang);
 const year = new Date().getFullYear();
-const resources = [
-  { label: '文件', href: site.docsUrl, external: true },
-  { label: '服務條款', href: '/terms', external: false },
-  { label: '隱私權政策', href: '/privacy', external: false },
+const resources: { key: Key; href: string; external: boolean }[] = [
+  { key: 'footer.docs', href: site.docsUrl, external: true },
+  { key: 'footer.terms', href: localePath(lang, '/terms'), external: false },
+  { key: 'footer.privacy', href: localePath(lang, '/privacy'), external: false },
 ];
 ---
 
@@ -14,23 +18,23 @@ const resources = [
     <div class="grid gap-12 md:grid-cols-12">
       <div class="md:col-span-5">
         <Logo />
-        <p class="mt-2 max-w-sm text-muted-foreground">{site.slogan}</p>
-        <div class="mt-6 flex h-12 w-32 items-center justify-center rounded border border-border bg-muted text-[11px] text-muted-foreground">合作標章（假圖）</div>
+        <p class="mt-2 max-w-sm text-muted-foreground">{$('slogan')}</p>
+        <div class="mt-6 flex h-12 w-32 items-center justify-center rounded border border-border bg-muted text-[11px] text-muted-foreground">{$('footer.badge')}</div>
       </div>
 
       <div class="md:col-span-3">
-        <h3 class="text-sm font-semibold uppercase tracking-wider text-ink">資源</h3>
+        <h3 class="text-sm font-semibold uppercase tracking-wider text-ink">{$('footer.resources')}</h3>
         <ul class="mt-4 space-y-3 text-sm">
           {resources.map((r) => (
             <li>
-              <a href={r.href} target={r.external ? '_blank' : undefined} rel={r.external ? 'noopener noreferrer' : undefined} class="text-muted-foreground transition-colors hover:text-ink">{r.label}</a>
+              <a href={r.href} target={r.external ? '_blank' : undefined} rel={r.external ? 'noopener noreferrer' : undefined} class="text-muted-foreground transition-colors hover:text-ink">{$(r.key)}</a>
             </li>
           ))}
         </ul>
       </div>
 
       <div class="md:col-span-4">
-        <h3 class="text-sm font-semibold uppercase tracking-wider text-ink">聯絡我們</h3>
+        <h3 class="text-sm font-semibold uppercase tracking-wider text-ink">{$('footer.contact')}</h3>
         <ul class="mt-4 space-y-3 text-sm">
           <li>
             <a href={`mailto:${site.email}`} class="flex items-center gap-2 text-muted-foreground transition-colors hover:text-ink">
@@ -55,8 +59,11 @@ const resources = [
     </div>
 
     <div class="mt-12 flex flex-col items-start justify-between gap-4 border-t border-border pt-8 sm:flex-row sm:items-center">
-      <p class="text-sm text-muted-foreground">© {year} {site.company} All rights reserved.</p>
-      <p class="text-sm text-muted-foreground">本網站內容皆為示意假字與假圖。</p>
+      <div class="text-sm text-muted-foreground">
+        <p>© {year} {site.company} All rights reserved.</p>
+        <p class="mt-1">{$('footer.note')}</p>
+      </div>
+      <LangSwitch class="px-0" />
     </div>
   </div>
 </footer>

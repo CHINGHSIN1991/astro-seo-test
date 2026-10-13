@@ -1,0 +1,30 @@
+---
+import Base from '../../../layouts/Base.astro';
+import NewsRow from '../../../components/NewsRow.astro';
+import { getCollection } from 'astro:content';
+import { langPaths, tr, useLang, localePath, pairEntries, pick } from '../../../i18n';
+
+export const getStaticPaths = langPaths;
+
+const lang = useLang(Astro);
+const $ = tr(lang);
+const posts = pairEntries(await getCollection('updates')).sort((a, b) => b.zh.data.date.valueOf() - a.zh.data.date.valueOf());
+---
+
+<Base title={$('updates.title')} description={$('updates.description')}>
+  <div class="container-content pb-24 pt-16 md:pb-32 md:pt-24">
+    <div class="grid gap-14 md:grid-cols-12 md:gap-8">
+      <div class="md:col-span-4">
+        <p class="text-xs font-medium uppercase tracking-[0.14em] text-brand">{$('updates.eyebrow')}</p>
+        <h1 class="mt-4 text-4xl font-medium tracking-tightest text-ink md:text-5xl">{$('updates.title')}</h1>
+        <p class="mt-5 max-w-xs leading-relaxed text-muted-foreground">{$('updates.description')}</p>
+      </div>
+      <div class="md:col-span-7 md:col-start-6">
+        {posts.map((p) => {
+          const e = pick(p, lang);
+          return <NewsRow href={localePath(lang, `/updates/${p.zh.id}`)} category={e.data.category} title={e.data.title} date={e.data.date} />;
+        })}
+      </div>
+    </div>
+  </div>
+</Base>

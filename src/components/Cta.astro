@@ -1,5 +1,8 @@
 ---
 import { site } from '../data/site';
+import { tr, useLang, localePath } from '../i18n';
+const lang = useLang(Astro);
+const $ = tr(lang);
 ---
 
 <section class="bg-white px-6 pb-24 pt-8 md:pb-32">
@@ -7,11 +10,11 @@ import { site } from '../data/site';
     <div class="relative overflow-hidden rounded-3xl bg-ink px-8 py-20 md:px-16 md:py-24">
       <div class="pointer-events-none absolute -right-24 -top-24 h-80 w-80 rounded-full bg-brand/20 blur-3xl" aria-hidden="true"></div>
       <div class="relative max-w-2xl">
-        <h2 class="text-3xl font-medium leading-tight tracking-tightest text-white md:text-4xl">邀請您用 AI 自動化您的工作流程</h2>
-        <p class="mt-5 text-lg leading-relaxed text-white/70 md:text-xl">留下您的聯繫方式，或透過 Email 聯繫我們。</p>
+        <h2 class="text-3xl font-medium leading-tight tracking-tightest text-white md:text-4xl">{$('cta.title')}</h2>
+        <p class="mt-5 text-lg leading-relaxed text-white/70 md:text-xl">{$('cta.subtitle')}</p>
         <div class="mt-9 flex flex-col items-start gap-3 sm:flex-row sm:items-center">
-          <a href="/request-demo" class="btn btn-lg bg-white text-ink hover:bg-white/90">
-            預約 Demo
+          <a href={localePath(lang, '/request-demo')} class="btn btn-lg bg-white text-ink hover:bg-white/90">
+            {$('cta.bookDemo')}
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
           </a>
           <a href={`mailto:${site.email}`} class="inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-medium text-white/80 transition-colors hover:text-white">

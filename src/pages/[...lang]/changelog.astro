@@ -1,22 +1,31 @@
 ---
-import Base from '../layouts/Base.astro';
+import Base from '../../layouts/Base.astro';
 import { getCollection, render } from 'astro:content';
-import { formatDateSpaced } from '../data/site';
+import { langPaths, tr, useLang, formatDate, pairEntries, pick } from '../../i18n';
 
-const entries = (await getCollection('changelog')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
-const rendered = await Promise.all(entries.map(async (e) => ({ entry: e, Content: (await render(e)).Content })));
+export const getStaticPaths = langPaths;
+
+const lang = useLang(Astro);
+const $ = tr(lang);
+const pairs = pairEntries(await getCollection('changelog')).sort((a, b) => b.zh.data.date.valueOf() - a.zh.data.date.valueOf());
+const rendered = await Promise.all(
+  pairs.map(async (p) => {
+    const entry = pick(p, lang);
+    return { id: p.zh.id, entry, Content: (await render(entry)).Content };
+  }),
+);
 const last = rendered.length - 1;
 ---
 
-<Base title="更新日誌" description="Nexora AI 每一次版本更新的新功能、改進與修正。">
+<Base title={$('nav.changelog')}>
   <div class="container-content pb-24 pt-20 md:pb-32 md:pt-28">
     <p class="text-base text-muted-foreground md:ml-[25%]">Changelog</p>
 
-    {rendered.map(({ entry, Content }, i) => {
+    {rendered.map(({ id, entry, Content }, i) => {
       const Title = i === 0 ? 'h1' : 'h2';
       return (
         <article
-          id={entry.id}
+          id={id}
           class:list={[
             'grid scroll-mt-24 gap-8 md:grid-cols-12 md:gap-8',
             i === 0 ? 'mt-8 pb-24 md:pb-32' : 'py-24 md:py-32',
@@ -24,7 +33,7 @@ const last = rendered.length - 1;
           ]}
         >
           <time datetime={entry.data.date.toISOString()} class="text-base text-muted-foreground md:sticky md:top-24 md:col-span-3 md:self-start md:pt-2">
-            {formatDateSpaced(entry.data.date)}
+            {formatDate(entry.data.date, lang, 'spaced')}
           </time>
           <div class="md:col-span-7 md:col-start-4">
             <header>
