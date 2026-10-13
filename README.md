@@ -31,6 +31,18 @@ npm run preview   # 預覽 build 結果
 | `/request-demo` | 預約 Demo 表單（前端驗證 + 成功狀態；送出為模擬，見下方） |
 | `/terms`、`/privacy` | 服務條款、隱私權政策（假字） |
 
+## 內容編輯（Sveltia CMS）
+
+不需要手動編輯 Markdown，可用內建的 CMS 介面新增或修改「最新消息」與「更新日誌」，發布後會直接 commit 到 GitHub，GitHub Actions 隨即自動部署。
+
+1. 到 GitHub 建立 fine-grained personal access token：Repository access 選本 repo，Permissions 的 **Contents** 設為 Read and write。
+2. `npm run dev`，開 `http://localhost:4321/astro-seo-test/admin/`。
+3. 按 **Sign In with Token** 貼上 token。
+4. 新增條目時填寫 slug（小寫英文與連字號）與中英文內容，按 **Publish**。Sveltia 會寫入 `src/content/<collection>/zh/` 與 `en/` 兩個檔案並 commit 到 `main`。
+5. 回到本機記得 `git pull`，因為 commit 是透過 GitHub API 直接進遠端的。
+
+CMS 檔案在 `cms/`，由 `astro.config.mjs` 的 `cmsAdmin` plugin 只在 dev server 提供，不會部署到 GitHub Pages。
+
 ## 替換內容的位置
 
 - **介面文案（中英）**：`src/i18n.ts` 的 `dict`；聯絡資訊與數據數值在 `src/data/site.ts`

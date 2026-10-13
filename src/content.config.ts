@@ -8,6 +8,8 @@ import { glob } from 'astro/loaders';
 const updates = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/updates' }),
   schema: z.object({
+    /** CMS 用來決定檔名的欄位，頁面不使用 */
+    slug: z.string().optional(),
     title: z.string(),
     date: z.coerce.date(),
     category: z.enum(['product', 'company', 'event']),
@@ -20,6 +22,7 @@ const updates = defineCollection({
 const changelog = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/changelog' }),
   schema: z.object({
+    slug: z.string().optional(),
     title: z.string(),
     date: z.coerce.date(),
     intro: z.string(),

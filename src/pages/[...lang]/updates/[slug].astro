@@ -3,7 +3,7 @@ import Base from '../../../layouts/Base.astro';
 import NewsRow from '../../../components/NewsRow.astro';
 import Placeholder from '../../../components/Placeholder.astro';
 import { getCollection, render } from 'astro:content';
-import { tr, useLang, localePath, formatDate, categoryKey, pairEntries, pick, langPaths, type Lang } from '../../../i18n';
+import { tr, useLang, localePath, formatDate, categoryKey, pairEntries, pick, langPaths, base, type Lang } from '../../../i18n';
 
 export async function getStaticPaths() {
   const pairs = pairEntries(await getCollection('updates')).sort((a, b) => b.zh.data.date.valueOf() - a.zh.data.date.valueOf());
@@ -45,7 +45,7 @@ const { Content } = await render(entry);
 
     {entry.data.image && (
       <figure class="mt-10 overflow-hidden rounded-2xl bg-muted md:mt-14">
-        <img src={entry.data.image} alt={entry.data.imageAlt ?? entry.data.title} class="aspect-[4/3] w-full object-cover" />
+        <img src={`${base}${entry.data.image}`} alt={entry.data.imageAlt ?? entry.data.title} class="aspect-[4/3] w-full object-cover" />
       </figure>
     )}
 
