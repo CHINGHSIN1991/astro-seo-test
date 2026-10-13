@@ -1,0 +1,30 @@
+---
+/**
+ * 404 導回首頁。
+ * GitHub Pages 對任何不存在的路徑都會回傳根目錄的 404.html（由本檔案產生），
+ * 靜態站無法做伺服器端 redirect，所以用 meta refresh + JS 導回首頁。
+ * 若原路徑帶 /en/ 前綴，導回英文首頁；否則導回中文首頁。
+ */
+import { base } from '../i18n';
+
+const home = `${base}/`;
+const homeEn = `${base}/en/`;
+---
+
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <meta http-equiv="refresh" content={`0; url=${home}`} />
+    <title>Redirecting…</title>
+    <script is:inline define:vars={{ home, homeEn }}>
+      var target = location.pathname.indexOf(homeEn) === 0 ? homeEn : home;
+      location.replace(target);
+    </script>
+  </head>
+  <body>
+    <p>Redirecting… <a href={home}>Go to homepage</a></p>
+  </body>
+</html>
