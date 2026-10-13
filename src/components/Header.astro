@@ -1,0 +1,80 @@
+---
+import Logo from './Logo.astro';
+import { nav } from '../data/site';
+const current = Astro.url.pathname;
+---
+
+<header
+  id="site-header"
+  class="sticky top-0 z-50 border-b border-transparent bg-white/0 transition-colors duration-300 data-[scrolled]:border-border data-[scrolled]:bg-white/80 data-[scrolled]:backdrop-blur-md"
+>
+  <div class="container-content flex h-16 items-center justify-between">
+    <Logo />
+
+    <nav class="hidden items-center gap-8 md:flex" aria-label="主選單">
+      {
+        nav.map((item) => (
+          <a
+            href={item.href}
+            class:list={[
+              'text-sm font-medium transition-colors hover:text-ink',
+              current.startsWith(item.href) ? 'text-ink' : 'text-muted-foreground',
+            ]}
+          >
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="hidden items-center md:flex">
+      <a href="/request-demo" class="btn btn-primary btn-sm">預約 Demo</a>
+    </div>
+
+    <button
+      type="button"
+      id="menu-toggle"
+      class="inline-flex h-10 w-10 items-center justify-center rounded-lg text-ink md:hidden"
+      aria-label="開啟選單"
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+    >
+      <svg class="icon-open h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      <svg class="icon-close hidden h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+
+  <div id="mobile-menu" class="hidden border-t border-border bg-white md:hidden">
+    <div class="container-content flex flex-col gap-1 py-4">
+      {
+        nav.map((item) => (
+          <a href={item.href} class="rounded-lg px-3 py-2.5 text-sm font-medium text-ink hover:bg-muted">
+            {item.label}
+          </a>
+        ))
+      }
+      <a href="/request-demo" class="btn btn-primary mt-3">預約 Demo</a>
+    </div>
+  </div>
+</header>
+
+<script>
+  const header = document.getElementById('site-header')!;
+  const onScroll = () => {
+    if (window.scrollY > 8) header.setAttribute('data-scrolled', '');
+    else header.removeAttribute('data-scrolled');
+  };
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  const toggle = document.getElementById('menu-toggle')!;
+  const menu = document.getElementById('mobile-menu')!;
+  toggle.addEventListener('click', () => {
+    const open = menu.classList.toggle('hidden') === false;
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.querySelector('.icon-open')!.classList.toggle('hidden', open);
+    toggle.querySelector('.icon-close')!.classList.toggle('hidden', !open);
+    if (open) header.setAttribute('data-scrolled', '');
+    else onScroll();
+  });
+</script>

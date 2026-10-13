@@ -1,0 +1,16 @@
+---
+interface Props {
+  variant?: 'color' | 'white';
+  class?: string;
+}
+import { site } from '../data/site';
+const { variant = 'color', class: className = '' } = Astro.props;
+const text = variant === 'white' ? 'text-white' : 'text-ink';
+---
+
+<a href="/" class={`inline-flex items-center gap-2.5 ${className}`} aria-label={`${site.name} 首頁`}>
+  <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+    <circle cx="14" cy="14" r="12" fill="#189a7c"></circle>
+  </svg>
+  <span class={`text-lg font-semibold tracking-tight ${text}`}>{site.name}</span>
+</a>

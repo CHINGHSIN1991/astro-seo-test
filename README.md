@@ -11,14 +11,13 @@ npm run build     # 輸出至 dist/
 npm run preview   # 預覽 build 結果
 ```
 
-技術：Astro 7、Tailwind CSS 4（`@tailwindcss/vite`）、`@tailwindcss/typography`、Content Collections。純靜態輸出，無需伺服器。
+技術：Astro 7、Tailwind CSS 4（`@tailwindcss/vite`）、Content Collections。純靜態輸出，無需伺服器。
 
 ## 頁面
 
 | 路徑 | 說明 |
 | --- | --- |
-| `/` | 首頁：Hero + 示範影片輪播、合作標章、客戶 Logo 牆、核心功能、數據、願景、客戶見證、最新消息、CTA |
-| `/features` | 功能頁：六大功能總覽 + 逐一詳細介紹（錨點 `#codegen`、`#skills`…） |
+| `/`（`/#features` 為功能區塊錨點） | 首頁：Hero + 示範影片輪播、核心功能、數據、客戶見證、合作標章、願景、最新消息、CTA |
 | `/changelog` | 更新日誌：依日期排序的版本更新（來源 `src/content/changelog/*.md`） |
 | `/updates` | 最新消息列表（來源 `src/content/updates/*.md`） |
 | `/updates/[slug]` | 單篇消息頁，含「繼續閱讀」 |
@@ -28,10 +27,9 @@ npm run preview   # 預覽 build 結果
 ## 替換內容的位置
 
 - **品牌／文案／數據／見證**：`src/data/site.ts`
-- **更新日誌**：在 `src/content/changelog/` 新增 `.md`，frontmatter 需有 `title`、`version`、`date`、`intro`
+- **更新日誌**：在 `src/content/changelog/` 新增 `.md`，frontmatter 需有 `title`、`date`、`intro`
 - **最新消息**：在 `src/content/updates/` 新增 `.md`，frontmatter 需有 `title`、`date`、`category`（產品／公司／活動）、`excerpt`，`image` 選填
 - **假圖**：頁面內使用 `src/components/Placeholder.astro`；Markdown 內使用 `/images/placeholder-16x9.svg`、`/images/placeholder-4x3.svg`
 - **配色／字體**：`src/styles/global.css` 的 `@theme`（品牌色 `--color-brand`）
 - **表單後端**：`src/pages/request-demo.astro` 底部 `<script>` 內的 `TODO`，將模擬送出改為實際 API 呼叫
-- **語言切換按鈕**：Header 內目前僅為 UI 示意，未實作多語系
 # astro-seo-test
