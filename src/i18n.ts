@@ -291,14 +291,18 @@ export const tr = (lang: Lang) => (key: Key): string => dict[lang][key];
 /** getStaticPaths 用：中文不帶前綴、英文帶 /en */
 export const langPaths = () => [{ params: { lang: undefined }, props: { lang: 'zh' as Lang } }, { params: { lang: 'en' }, props: { lang: 'en' as Lang } }];
 
-/** 依語言加上路徑前綴 */
-export const localePath = (lang: Lang, path: string) => (lang === 'zh' ? path : `/en${path === '/' ? '/' : path}`);
+/** 部署子路徑（astro.config 的 `base`），不含結尾斜線；部署在根路徑時為空字串 */
+export const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
-/** 同一頁切換到另一語言的網址 */
+/** 依語言加上路徑前綴，並補上部署子路徑 */
+export const localePath = (lang: Lang, path: string) => `${base}${lang === 'zh' ? path : `/en${path === '/' ? '/' : path}`}`;
+
+/** 同一頁切換到另一語言的網址（pathname 來自 Astro.url.pathname，已含 base） */
 export function switchLangPath(lang: Lang, pathname: string) {
-  if (lang === 'zh') return `/en${pathname === '/' ? '/' : pathname}`;
-  const stripped = pathname.replace(/^\/en(?=\/|$)/, '');
-  return stripped || '/';
+  const path = (base && pathname.startsWith(base) ? pathname.slice(base.length) : pathname) || '/';
+  if (lang === 'zh') return `${base}/en${path === '/' ? '/' : path}`;
+  const stripped = path.replace(/^\/en(?=\/|$)/, '');
+  return `${base}${stripped || '/'}`;
 }
 
 /** 分類（中文 enum）→ 字典 key */
