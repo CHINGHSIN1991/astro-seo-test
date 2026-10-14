@@ -2,26 +2,30 @@
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import { dict, tr, useLang, switchLangPath, base } from '../i18n';
+import JsonLd from '../components/JsonLd.astro';
+import { tr, useLang, switchLangPath, base, langTag } from '../i18n';
+import { absoluteUrl, organizationSchema, type JsonLdNode } from '../seo';
 
 interface Props {
   /** 頁面標題；省略則用品牌標語 */
   title?: string;
   description?: string;
+  /** 頁面專屬的 JSON-LD 節點（如 Article），會與 Organization 合併成同一個 @graph */
+  jsonLd?: JsonLdNode[];
 }
 
 const lang = useLang(Astro);
 const $ = tr(lang);
-const { title, description = $('meta.description') } = Astro.props;
+const { title, description = $('meta.description'), jsonLd = [] } = Astro.props;
 const pageTitle = title ? `${title} — ${$('name')}` : `${$('name')} — ${$('slogan')}`;
 const pathname = Astro.url.pathname;
 const altPath = switchLangPath(lang, pathname);
-const htmlLang = lang === 'en' ? 'en' : 'zh-Hant';
-// canonical / hreflang 必須是絕對網址；以 astro.config 的 `site` 為基準，
-// 並統一加結尾斜線（build.format 'directory' 的輸出網址形式），避免 dev 與 build 不一致
-const absoluteUrl = (path: string) => new URL(path.endsWith('/') ? path : `${path}/`, Astro.site).href;
-const canonical = absoluteUrl(pathname);
-const altUrl = absoluteUrl(altPath);
+const htmlLang = langTag(lang);
+// canonical / hreflang 必須是絕對網址（見 seo.ts 的 absoluteUrl）
+const canonical = absoluteUrl(Astro.site, pathname);
+const altUrl = absoluteUrl(Astro.site, altPath);
+// 每頁都帶 Organization；頁面另外傳入的節點（如 Article）以 @id 參照它
+const schema = [organizationSchema(Astro.site, lang), ...jsonLd];
 ---
 
 <!doctype html>
@@ -41,9 +45,10 @@ const altUrl = absoluteUrl(altPath);
     <meta property="og:description" content={description} />
     <meta property="og:locale" content={lang === 'en' ? 'en_US' : 'zh_TW'} />
     <link rel="alternate" hreflang={htmlLang} href={canonical} />
-    <link rel="alternate" hreflang={lang === 'en' ? 'zh-Hant' : 'en'} href={altUrl} />
+    <link rel="alternate" hreflang={langTag(lang === 'en' ? 'zh' : 'en')} href={altUrl} />
     <link rel="alternate" hreflang="x-default" href={lang === 'en' ? altUrl : canonical} />
     <link rel="sitemap" type="application/xml" href={`${base}/sitemap-index.xml`} />
+    <JsonLd nodes={schema} />
     <meta name="theme-color" content="#ffffff" />
     <link rel="icon" type="image/svg+xml" href={`${base}/favicon.svg`} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />

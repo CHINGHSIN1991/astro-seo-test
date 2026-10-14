@@ -1,0 +1,13 @@
+---
+/**
+ * 輸出一段 JSON-LD；多個節點合併為同一個 @graph，彼此可用 @id 互相參照。
+ */
+import { jsonLdHtml, type JsonLdNode } from '../seo';
+
+interface Props {
+  nodes: JsonLdNode[];
+}
+const { nodes } = Astro.props;
+---
+
+<script type="application/ld+json" is:inline set:html={jsonLdHtml(nodes)} />

@@ -282,6 +282,9 @@ export const dict = {
 
 export type Key = keyof typeof dict.zh;
 
+/** BCP 47 語言標籤（html lang、hreflang、inLanguage 共用） */
+export const langTag = (lang: Lang) => (lang === 'en' ? 'en' : 'zh-Hant');
+
 /** 取得目前頁面語言 */
 export const useLang = (astro: { currentLocale?: string }): Lang => (astro.currentLocale === 'en' ? 'en' : 'zh');
 
