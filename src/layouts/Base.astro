@@ -17,6 +17,11 @@ const pageTitle = title ? `${title} — ${$('name')}` : `${$('name')} — ${$('s
 const pathname = Astro.url.pathname;
 const altPath = switchLangPath(lang, pathname);
 const htmlLang = lang === 'en' ? 'en' : 'zh-Hant';
+// canonical / hreflang 必須是絕對網址；以 astro.config 的 `site` 為基準，
+// 並統一加結尾斜線（build.format 'directory' 的輸出網址形式），避免 dev 與 build 不一致
+const absoluteUrl = (path: string) => new URL(path.endsWith('/') ? path : `${path}/`, Astro.site).href;
+const canonical = absoluteUrl(pathname);
+const altUrl = absoluteUrl(altPath);
 ---
 
 <!doctype html>
@@ -28,14 +33,16 @@ const htmlLang = lang === 'en' ? 'en' : 'zh-Hant';
     <script is:inline>document.documentElement.classList.add('js');</script>
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
     <meta property="og:site_name" content={$('name')} />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:locale" content={lang === 'en' ? 'en_US' : 'zh_TW'} />
-    <link rel="alternate" hreflang={htmlLang} href={pathname} />
-    <link rel="alternate" hreflang={lang === 'en' ? 'zh-Hant' : 'en'} href={altPath} />
-    <link rel="alternate" hreflang="x-default" href={lang === 'en' ? altPath : pathname} />
+    <link rel="alternate" hreflang={htmlLang} href={canonical} />
+    <link rel="alternate" hreflang={lang === 'en' ? 'zh-Hant' : 'en'} href={altUrl} />
+    <link rel="alternate" hreflang="x-default" href={lang === 'en' ? altUrl : canonical} />
     <meta name="theme-color" content="#ffffff" />
     <link rel="icon" type="image/svg+xml" href={`${base}/favicon.svg`} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
