@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://chinghsin1991.github.io/astro-seo-test/sitemap-index.xml

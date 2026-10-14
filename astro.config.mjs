@@ -4,6 +4,7 @@ import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 
 import tailwindcss from '@tailwindcss/vite';
+import sitemap from '@astrojs/sitemap';
 
 const base = '/astro-seo-test';
 
@@ -51,6 +52,15 @@ export default defineConfig({
     locales: ['zh', 'en'],
     routing: { prefixDefaultLocale: false },
   },
+  integrations: [
+    sitemap({
+      // 與 Base.astro 的 hreflang 一致：zh → zh-Hant、en → en，讓每個 <url> 帶 xhtml:link 互相對應
+      i18n: {
+        defaultLocale: 'zh',
+        locales: { zh: 'zh-Hant', en: 'en' },
+      },
+    }),
+  ],
   vite: {
     plugins: [tailwindcss(), cmsAdmin()],
   },

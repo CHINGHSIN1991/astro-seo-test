@@ -43,6 +43,7 @@ const altUrl = absoluteUrl(altPath);
     <link rel="alternate" hreflang={htmlLang} href={canonical} />
     <link rel="alternate" hreflang={lang === 'en' ? 'zh-Hant' : 'en'} href={altUrl} />
     <link rel="alternate" hreflang="x-default" href={lang === 'en' ? altUrl : canonical} />
+    <link rel="sitemap" type="application/xml" href={`${base}/sitemap-index.xml`} />
     <meta name="theme-color" content="#ffffff" />
     <link rel="icon" type="image/svg+xml" href={`${base}/favicon.svg`} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
