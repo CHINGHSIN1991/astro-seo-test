@@ -17,12 +17,12 @@ npm run preview   # 預覽 build 結果
 
 ```bash
 npm run check      # astro check：型別檢查
-npm run build      # 建置後自動執行 SEO 檢查（postbuild → scripts/check-seo.mjs）
+npm run build      # 建置後自動執行 SEO 檢查（postbuild → scripts/check-seo.mjs），只輸出警告
 npm run check:seo  # 只對現有 dist/ 重跑 SEO 檢查
 npm test           # check + build
 ```
 
-`scripts/check-seo.mjs` 直接驗證 `dist/` 的輸出，任一項不符就讓 build 失敗：
+`scripts/check-seo.mjs` 直接驗證 `dist/` 的輸出，不符的項目會以警告列出，但不會讓 build 失敗：
 
 - 每頁有 `<html lang>`、唯一的 `<title>`、meta description、`<h1>`
 - canonical 為絕對網址、等於該頁部署網址、指向存在的頁面
@@ -33,7 +33,7 @@ npm test           # check + build
 - `sitemap-index.xml` 與子 sitemap 的每個網址都存在；所有可索引頁面都在 sitemap 裡，`noindex` 頁面（404）不在
 - `robots.txt` 存在、未封鎖整站、`Sitemap:` 指向存在的檔案
 
-GitHub Actions（`.github/workflows/deploy.yml`）在每次 push 到 `main` 與每個 PR 都會跑型別檢查與建置（含 SEO 檢查），失敗就不部署。
+GitHub Actions（`.github/workflows/deploy.yml`）在每次 push 到 `main` 與每個 PR 都會跑型別檢查與建置（含 SEO 檢查）；型別或建置失敗就不部署，SEO 警告可在 job log 中查看。
 
 ## 多語系
 

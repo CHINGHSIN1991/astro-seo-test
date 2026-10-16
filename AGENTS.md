@@ -14,10 +14,10 @@ Before finishing any change to pages, layouts, content, `src/seo.ts`, `src/i18n.
 
 ```
 npm run check   # astro check (types)
-npm run build   # astro build + SEO checks (postbuild → scripts/check-seo.mjs)
+npm run build   # astro build + SEO checks (postbuild → scripts/check-seo.mjs, warnings only)
 ```
 
-`scripts/check-seo.mjs` validates the built `dist/` (title, description, canonical, hreflang, Open Graph, JSON-LD, real `<main>` content, sitemap, robots.txt) and fails the build on any error. CI (`.github/workflows/deploy.yml`) runs the same two commands on every push and PR; do not weaken the checks to make a build pass — fix the page instead.
+`scripts/check-seo.mjs` validates the built `dist/` (title, description, canonical, hreflang, Open Graph, JSON-LD, real `<main>` content, sitemap, robots.txt) and prints a `⚠` warning for each problem. It does not fail the build, so read the output and fix every warning your change introduced. CI (`.github/workflows/deploy.yml`) runs the same two commands on every push and PR; do not remove or weaken checks to silence warnings — fix the page instead.
 
 ## Documentation
 

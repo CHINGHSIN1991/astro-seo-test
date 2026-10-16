@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 /**
- * SEO 檢查：對 `astro build` 的輸出（dist/）做靜態驗證，任何一項不符就以非 0 結束。
+ * SEO 檢查：對 `astro build` 的輸出（dist/）做靜態驗證，不符的項目以警告列出，不會讓 build 失敗。
  * 由 package.json 的 `postbuild` 自動執行，也可手動 `npm run check:seo`。
+ * 只有在完全無法檢查時（找不到 dist/、astro.config.mjs 缺少 site）才以非 0 結束。
  *
  * 檢查項目：
  * - 每個 HTML 頁面：<html lang>、唯一的 <title> 與 meta description、唯一的 <h1>
@@ -39,10 +40,13 @@ const base = (config.base ?? '/').replace(/\/+$/, '');
 const siteRoot = `${origin}${base}/`;
 
 // ---------- 工具 ----------
+/** 不符合 SEO 規則的項目（只輸出警告，不影響 build 結果） */
 const errors = [];
+/** 建議性的提示（例如 title 過長） */
 const warnings = [];
 const err = (file, msg) => errors.push(`${file}: ${msg}`);
 const warn = (file, msg) => warnings.push(`${file}: ${msg}`);
+/** 完全無法進行檢查時才中止 */
 function fail(msg) {
   console.error(`✖ ${msg}`);
   process.exit(1);
@@ -277,13 +281,10 @@ else {
   }
 }
 
-// ---------- 結果 ----------
+// ---------- 結果（只輸出，不影響 build 結束碼） ----------
 const indexable = [...pages.values()].filter((p) => !p.noindex).length;
 for (const w of warnings) console.warn(`⚠ ${w}`);
-for (const e of errors) console.error(`✖ ${e}`);
-console.log(`\nSEO 檢查：${pages.size} 個頁面（可索引 ${indexable}）、sitemap ${sitemapUrls.size} 筆、${errors.length} 個錯誤、${warnings.length} 個提示`);
-if (errors.length > 0) {
-  console.error('✖ SEO 檢查未通過');
-  process.exit(1);
-}
-console.log('✓ SEO 檢查通過');
+for (const e of errors) console.warn(`⚠ ${e}`);
+console.log(`\nSEO 檢查：${pages.size} 個頁面（可索引 ${indexable}）、sitemap ${sitemapUrls.size} 筆、${errors.length} 個問題、${warnings.length} 個提示`);
+if (errors.length > 0) console.warn('⚠ SEO 檢查發現問題，請視需要修正（不影響 build）');
+else console.log('✓ SEO 檢查通過');

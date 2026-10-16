@@ -1,7 +1,7 @@
 name: Build, check, and deploy
 
 # 每次 push 到 main 與每個 PR 都會：型別檢查 → 建置 → SEO 檢查（scripts/check-seo.mjs，由 postbuild 觸發）。
-# 任一步失敗就不會部署，避免未來的修改在不知不覺中破壞 SEO。
+# 型別檢查或建置失敗就不會部署；SEO 檢查只輸出警告，請在 job log 中查看。
 on:
   push:
     branches: [main]
