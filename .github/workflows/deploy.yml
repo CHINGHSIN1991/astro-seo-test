@@ -1,8 +1,11 @@
-name: Deploy to GitHub Pages
+name: Build, check, and deploy
 
+# 每次 push 到 main 與每個 PR 都會：型別檢查 → 建置 → SEO 檢查（scripts/check-seo.mjs，由 postbuild 觸發）。
+# 任一步失敗就不會部署，避免未來的修改在不知不覺中破壞 SEO。
 on:
   push:
     branches: [main]
+  pull_request:
   workflow_dispatch:
 
 permissions:
@@ -10,18 +13,42 @@ permissions:
   pages: write
   id-token: write
 
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   build:
+    name: Check and build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
-      - name: Install, build, and upload site
-        uses: withastro/action@v6
+        uses: actions/checkout@v7
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
         with:
           node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Type check (astro check)
+        run: npm run check
+
+      - name: Build and run SEO checks
+        run: npm run build
+
+      - name: Upload site
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: dist
 
   deploy:
+    name: Deploy to GitHub Pages
+    if: github.event_name != 'pull_request'
     needs: build
     runs-on: ubuntu-latest
     environment:

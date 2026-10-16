@@ -8,6 +8,17 @@ astro dev --background
 
 Manage the background server with `astro dev stop`, `astro dev status`, and `astro dev logs`.
 
+## Checks
+
+Before finishing any change to pages, layouts, content, `src/seo.ts`, `src/i18n.ts`, `public/robots.txt`, or `astro.config.mjs`, run:
+
+```
+npm run check   # astro check (types)
+npm run build   # astro build + SEO checks (postbuild → scripts/check-seo.mjs)
+```
+
+`scripts/check-seo.mjs` validates the built `dist/` (title, description, canonical, hreflang, Open Graph, JSON-LD, real `<main>` content, sitemap, robots.txt) and fails the build on any error. CI (`.github/workflows/deploy.yml`) runs the same two commands on every push and PR; do not weaken the checks to make a build pass — fix the page instead.
+
 ## Documentation
 
 Full documentation: https://docs.astro.build

@@ -15,6 +15,7 @@ const base = '/astro-seo-test';
  */
 function cmsAdmin() {
   const dir = path.resolve('cms');
+  /** @type {Record<string, { file: string; type: string }>} */
   const files = {
     '': { file: 'index.html', type: 'text/html; charset=utf-8' },
     'index.html': { file: 'index.html', type: 'text/html; charset=utf-8' },

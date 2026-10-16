@@ -13,6 +13,28 @@ npm run preview   # 預覽 build 結果
 
 技術：Astro 7、Tailwind CSS 4（`@tailwindcss/vite`）、Content Collections、Astro i18n routing。純靜態輸出，無需伺服器。
 
+## 檢查（SEO 與型別）
+
+```bash
+npm run check      # astro check：型別檢查
+npm run build      # 建置後自動執行 SEO 檢查（postbuild → scripts/check-seo.mjs）
+npm run check:seo  # 只對現有 dist/ 重跑 SEO 檢查
+npm test           # check + build
+```
+
+`scripts/check-seo.mjs` 直接驗證 `dist/` 的輸出，任一項不符就讓 build 失敗：
+
+- 每頁有 `<html lang>`、唯一的 `<title>`、meta description、`<h1>`
+- canonical 為絕對網址、等於該頁部署網址、指向存在的頁面
+- hreflang 含自身與 `x-default`、網址存在、兩種語言互相對應
+- `og:title`／`og:description`／`og:url`（與 canonical 一致）
+- JSON-LD 可解析並有 `@context`、`@type`
+- `<main>` 內有實際文字，不依賴 JavaScript 才能顯示
+- `sitemap-index.xml` 與子 sitemap 的每個網址都存在；所有可索引頁面都在 sitemap 裡，`noindex` 頁面（404）不在
+- `robots.txt` 存在、未封鎖整站、`Sitemap:` 指向存在的檔案
+
+GitHub Actions（`.github/workflows/deploy.yml`）在每次 push 到 `main` 與每個 PR 都會跑型別檢查與建置（含 SEO 檢查），失敗就不部署。
+
 ## 多語系
 
 - 中文（預設）在根路徑，英文在 `/en/` 前綴，例如 `/updates` ↔ `/en/updates`。Header 與 Footer 的語言切換會連到同一頁的另一語言版本。
